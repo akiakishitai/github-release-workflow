@@ -1,0 +1,67 @@
+name: Create Pull Request
+
+on:
+  push:
+    branches-ignore:
+      - "main"
+      - "master"
+
+jobs:
+  automated-pr:
+    runs-on: ubuntu-18.04
+    if: ${{ github.event.created }}
+    steps:
+      - name: check out
+        uses: actions/checkout@v2
+
+      - name: current branch
+        run: echo "BRANCH=`git name-rev --name-only HEAD`" >> $GITHUB_ENV
+
+      - name: dump
+        run: echo "$EV_CONTEXT"
+        env:
+          EV_CONTEXT: ${{ toJson(github.event) }}
+
+      - name: read graphql file
+        id: gql
+        run: |
+          exec 1>> $GITHUB_ENV
+          echo 'GQL_QUERY<<EOF'
+          cat .github/create-pr.gql
+          echo 'EOF'
+
+      - name: read template of pull request
+        id: template
+        run: |
+          exec 1>> $GITHUB_ENV
+          echo 'TEMPLATE<<EOF'
+          cat .github/pull_request_template.md
+          echo 'EOF'
+
+      - name: create pull request
+        id: create_pr
+        uses: actions/github-script@47f7cf65b5ced0830a325f705cad64f2f58dddf7
+        # ref: https://github.com/actions/github-script
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const query = process.env.PR_QUERY
+            const variables = {
+              repoId: process.env.PR_REPOID,
+              base: process.env.PR_BASE,
+              head: process.env.PR_HEAD,
+              title: process.env.PR_TITLE,
+              body: process.env.PR_BODY,
+            }
+
+            return await github.graphql(query, variables)
+        env:
+          PR_QUERY: ${{ env.GQL_QUERY }}
+          PR_REPOID: ${{ github.event.repository.node_id }}
+          PR_BASE: main
+          PR_HEAD: ${{ env.BRANCH }}
+          PR_TITLE: "WIP: create by actions/github-script@v3.1.0"
+          PR_BODY: ${{ env.TEMPLATE }}
+
+      - name: result
+        run: echo '${{ steps.create_pr.outputs.result }}'
