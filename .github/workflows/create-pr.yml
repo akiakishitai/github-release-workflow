@@ -1,0 +1,44 @@
+name: Create Pull Request
+
+on:
+  push:
+    branches-ignore:
+      - "main"
+      - "master"
+
+env:
+  WORKDIR: ${{ github.workspace }}
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: check out
+        uses: actions/checkout@v2
+      - name: read graphql file
+        id: gql
+        run: |
+          echo 'GQL_QUERY<<EOF' >> $GITHUB_ENV
+          cat .github/create-pr.gql >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - name: read template of pull request
+        id: template
+        run: |
+          echo 'TEMPLATE<<EOF' >> $GITHUB_ENV
+          cat .github/pull_request_template.md >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - name: check contents
+        run: |
+          echo 'GraphQL: ${{ env.GQL_QUERY }}'
+          echo 'Template: ${{ env.TEMPLATE }}'
+
+#      - name: create pull request
+#        uses: octokit/graphql-action@7dfc23d9d9d2073901d250e142d36c0c19c5a88f
+#        with:
+#          query: ${{ steps.outputs.gql.query }}
+#          # variables
+#          repoId: ${{ github.event.repository.node_id }}
+#          baseRef: ${{ github.base_ref }}
+#          headRef: ${{ github.head_ref }}
+#          title: "[WIP] create by octokit/graphql-action."
+#          body: ${{ steps.outputs.gql.body }}

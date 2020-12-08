@@ -1,0 +1,20 @@
+mutation(
+  $repoId: String!
+  $baseRef: String!
+  $headRef: String!
+  $title: String!
+  $body: String!
+) {
+  createPullRequest(
+    input: {
+      repositoryId: $repoId
+      baseRefName: $baseRef
+      headRefName: $headRef
+      title: $title
+    }
+  ) {
+    pullRequest {
+      createdAt
+    }
+  }
+}
