@@ -41,7 +41,7 @@ jobs:
           baseRef: ${{ github.base_ref }}
           headRef: ${{ github.head_ref }}
           title: |
-            [WIP] create by octokit/graphql-action.
+            WIP: create by octokit/graphql-action.
           body: |
             ${{ env.TEMPLATE }}
         env:
