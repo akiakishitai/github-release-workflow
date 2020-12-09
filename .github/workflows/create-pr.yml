@@ -41,7 +41,7 @@ jobs:
           script: |
             const query = process.env.PR_QUERY
             const variables = {
-              repoId: ${{ github.event.repository.node_id }},
+              repoId: process.env.PR_REPOID,
               base: process.env.PR_BASE,
               head: process.env.PR_HEAD,
               title: process.env.PR_TITLE,
@@ -50,11 +50,12 @@ jobs:
 
             return await github.graphql(query, variables)
         env:
+          PR_QUERY: ${{ env.GQL_QUERY }}
+          PR_REPOID: ${{ github.event.repository.node_id }}
           PR_BASE: main
           PR_HEAD: ${{ env.BRANCH }}
           PR_TITLE: "WIP: create by actions/github-script@v3.1.0"
           PR_BODY: ${{ env.TEMPLATE }}
-          PR_QUERY: ${{ env.GQL_QUERY }}
 
       - name: result
         run: echo "${{ steps.create_pr.outputs.result }}"
