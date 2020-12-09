@@ -41,7 +41,6 @@ jobs:
       - name: create pull request
         id: create_pr
         uses: actions/github-script@47f7cf65b5ced0830a325f705cad64f2f58dddf7
-        # ref: https://github.com/actions/github-script
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
@@ -63,5 +62,17 @@ jobs:
           PR_TITLE: "WIP: create by actions/github-script@v3.1.0"
           PR_BODY: ${{ env.TEMPLATE }}
 
-      - name: result
-        run: echo '${{ steps.create_pr.outputs.result }}'
+      - name: bot comment
+        uses: peter-evans/create-or-update-comment@5221bf4aa615e5c6e95bb142f9673a9c791be2cd
+        with:
+          issue-number: ${{ steps.create_pr.outputs.result.createPullRequest.pullRequest.number }}
+          body: |
+            This pull request was generated automatically (by [actions/github-script][link-1]).
+            Please modify the title and body.
+
+            Thanks!
+
+            [![create-or-update-comment](https://img.shields.io/badge/commented%20by-Create%20or%20Update%20Comment-green?logo=github-actions)][link-2]
+
+            [link-1]: https://github.com/actions/github-script
+            [link-2]: https://github.com/peter-evans/create-or-update-comment
