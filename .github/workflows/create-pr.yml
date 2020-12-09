@@ -43,6 +43,8 @@ jobs:
           title: "[WIP] create by octokit/graphql-action."
           body: |
             ${{ env.TEMPLATE }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: response
         run: |
