@@ -65,7 +65,7 @@ jobs:
       - name: bot comment
         uses: peter-evans/create-or-update-comment@5221bf4aa615e5c6e95bb142f9673a9c791be2cd
         with:
-          issue-number: ${{ steps.create_pr.outputs.result.createPullRequest.pullRequest.number }}
+          issue-number: ${{ fromJson(steps.create_pr.outputs.result).createPullRequest.pullRequest.number }}
           body: |
             This pull request was generated automatically (by [actions/github-script][link-1]).
             Please modify the title and body.
@@ -76,3 +76,5 @@ jobs:
 
             [link-1]: https://github.com/actions/github-script
             [link-2]: https://github.com/peter-evans/create-or-update-comment
+        env:
+          PR_RESULT: ${{ steps.create_pr.outputs.result }}
