@@ -41,8 +41,8 @@ jobs:
           script: |
             const script = require(`${process.env.GITHUB_WORKSPACE}/.github/create-pr.graphql.js`)
             const options = {
-              baseRef: process.env.BASE,
-              headRef: process.env.HEAD,
+              base: process.env.BASE,
+              head: process.env.HEAD,
               title: process.env.TITLE,
             }
 
