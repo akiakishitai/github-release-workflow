@@ -49,6 +49,7 @@ jobs:
             }
 
             return await github.graphql(query, variables)
+              .catch((err) => err)
         env:
           PR_QUERY: ${{ env.GQL_QUERY }}
           PR_REPOID: ${{ github.event.repository.node_id }}
