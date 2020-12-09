@@ -16,6 +16,9 @@ jobs:
       - name: check out
         uses: actions/checkout@v2
 
+      - name: current branch
+        run: echo "BRANCH=`git name-rev --name-only HEAD`" >> $GITHUB_ENV
+
       - name: read graphql file
         id: gql
         run: |
@@ -32,21 +35,22 @@ jobs:
 
       - name: create pull request
         id: create_pr
-        uses: octokit/graphql-action@7dfc23d9d9d2073901d250e142d36c0c19c5a88f
+        uses: actions/github-script@47f7cf65b5ced0830a325f705cad64f2f58dddf7
         with:
-          query: |
-            ${{ env.GQL_QUERY }}
-          # variables
-          repoId: ${{ github.event.repository.node_id }}
-          baseRef: ${{ github.base_ref }}
-          headRef: ${{ github.head_ref }}
-          title: |
-            WIP: create by octokit/graphql-action.
-          body: |
-            ${{ env.TEMPLATE }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const script = require(`${process.env.GITHUB_WORKSPACE}/.github/create-pr.graphql.js`)
+            const options = {
+              baseRef: process.env.BASE,
+              headRef: process.env.HEAD,
+              title: process.env.TITLE,
+            }
 
-      - name: response
-        run: |
-          echo 'created: ${{ steps.create_pr.outputs.data }}'
+            return script({github, context, options})
+        env:
+          BASE: main
+          HEAD: ${{ env.BRANCH }}
+          TITLE: "WIP: create by actions/github-script@v3.1.0"
+
+      - name: result
+        run: echo "${{ steps.set-result.outputs.result }}"

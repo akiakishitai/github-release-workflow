@@ -1,15 +1,15 @@
 mutation(
   $repoId: String!
-  $baseRef: String!
-  $headRef: String!
+  $base: String!
+  $head: String!
   $title: String!
   $body: String!
 ) {
   createPullRequest(
     input: {
       repositoryId: $repoId
-      baseRefName: $baseRef
-      headRefName: $headRef
+      baseRefName: $base
+      headRefName: $head
       title: $title
     }
   ) {
