@@ -16,6 +16,11 @@ jobs:
       - name: current branch
         run: echo "BRANCH=`git name-rev --name-only HEAD`" >> $GITHUB_ENV
 
+      - name: dump
+        run: echo "$EV_CONTEXT"
+        env:
+          EV_CONTEXT: ${{ toJson(github.event) }}
+
       - name: read graphql file
         id: gql
         run: |
