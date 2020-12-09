@@ -40,7 +40,8 @@ jobs:
           repoId: ${{ github.event.repository.node_id }}
           baseRef: ${{ github.base_ref }}
           headRef: ${{ github.head_ref }}
-          title: "[WIP] create by octokit/graphql-action."
+          title: |
+            [WIP] create by octokit/graphql-action.
           body: |
             ${{ env.TEMPLATE }}
         env:
