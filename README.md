@@ -6,5 +6,5 @@ GitHub workflow files for automation.
 
 - **Create pull request**
 
-  Create pull request when you `git push` .
+  Create pull request when you `git push` (create a topic branch).
   [workflows/create-pr.yml](.github/workflows/create-pr.yml)
