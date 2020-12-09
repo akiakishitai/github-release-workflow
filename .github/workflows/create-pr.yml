@@ -39,18 +39,22 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
-            const script = require(`${process.env.GITHUB_WORKSPACE}/.github/create-pr.graphql.js`)
-            const options = {
-              base: process.env.BASE,
-              head: process.env.HEAD,
-              title: process.env.TITLE,
+            const query = process.env.PR_QUERY
+            const variables = {
+              repoId: ${{ github.env.repository.node_id }},
+              base: process.env.PR_BASE,
+              head: process.env.PR_HEAD,
+              title: process.env.PR_TITLE,
+              body: process.env.PR_BODY,
             }
 
-            return script({github, context, options})
+            return await github.graphql(query, variables)
         env:
-          BASE: main
-          HEAD: ${{ env.BRANCH }}
-          TITLE: "WIP: create by actions/github-script@v3.1.0"
+          PR_BASE: main
+          PR_HEAD: ${{ env.BRANCH }}
+          PR_TITLE: "WIP: create by actions/github-script@v3.1.0"
+          PR_BODY: ${{ env.TEMPLATE }}
+          PR_QUERY: ${{ env.GQL_QUERY }}
 
       - name: result
-        run: echo "${{ steps.set-result.outputs.result }}"
+        run: echo "${{ steps.create_pr.outputs.result }}"
