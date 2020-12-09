@@ -41,7 +41,7 @@ jobs:
           script: |
             const query = process.env.PR_QUERY
             const variables = {
-              repoId: ${{ github.env.repository.node_id }},
+              repoId: ${{ github.event.repository.node_id }},
               base: process.env.PR_BASE,
               head: process.env.PR_HEAD,
               title: process.env.PR_TITLE,
