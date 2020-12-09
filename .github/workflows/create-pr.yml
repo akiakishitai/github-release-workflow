@@ -6,9 +6,6 @@ on:
       - "main"
       - "master"
 
-env:
-  WORKDIR: ${{ github.workspace }}
-
 jobs:
   create-pr:
     runs-on: ubuntu-18.04
@@ -61,4 +58,4 @@ jobs:
           PR_BODY: ${{ env.TEMPLATE }}
 
       - name: result
-        run: echo "${{ steps.create_pr.outputs.result }}"
+        run: echo '${{ steps.create_pr.outputs.result }}'
