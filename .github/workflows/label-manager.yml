@@ -1,0 +1,18 @@
+name: Label-manager
+
+on:
+  push:
+    paths:
+      - ".github/workflows/label-manager.yml"
+      - ".github/labels.yml"
+  workflow_dispatch:
+
+jobs:
+  label-sync:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: check out
+        uses: actions/checkout@v2
+
+      - name: label syncronize
+        uses: crazy-max/ghaction-github-labeler@dbccbd0ebd1178b5942ba419c921b36525829588
