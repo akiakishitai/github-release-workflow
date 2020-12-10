@@ -1,0 +1,41 @@
+name: Auto-labeled-on-PR
+
+on:
+  pull_request:
+    types:
+      - "opened"
+      - "edited"
+
+jobs:
+  auto-labeled:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: labeled
+        uses: actions/github-script@47f7cf65b5ced0830a325f705cad64f2f58dddf7
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const config = [
+              { title: /^(fix|docs|style|refactor|perf|chore)[^:]*:/, labels: ['patch'] },
+              { title: /^feat[^:]*:/, labels: ['minor'] },
+              { title: /^([^:]+!|BREAKING CHANGE):/, labels: ['major'] },
+            ]
+
+            const labels = config
+              .filter( (xs) => xs.title.test(process.env.PR_TITLE) )
+              .reduce( (acc, curr) => acc.concat(curr.labels), [] )
+
+            if(labels.length === 0) {
+              console.log('Not labeled.')
+              return
+            }
+
+            github.issues.addLabels({
+              issue_number: process.env.PR_NUMBER,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: labels
+            })
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
