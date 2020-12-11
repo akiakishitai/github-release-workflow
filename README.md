@@ -13,3 +13,8 @@ GitHub workflow files for automation.
 
   Validate the pull request title or at least one commit message.
   Install [Semantic Pull Requests](https://github.com/apps/semantic-pull-requests) in GitHub Apps.
+
+- **Merge automatically**
+
+  Automatically merge pull requests with a specific label (`automerge` and `autosquash`).
+  [workflows/automerge.yml](.github/workflows/automerge.yml)
