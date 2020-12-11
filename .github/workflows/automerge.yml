@@ -7,7 +7,6 @@ on:
       - unlabeled
       - synchronize
       - opened
-      - edited
       - ready_for_review
       - reopened
       - unlocked
@@ -27,6 +26,6 @@ jobs:
         uses: "pascalgn/automerge-action@c9bd182"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          MERGE_LABELS: "automerge,autosquash,!invalid"
+          MERGE_LABELS: "automerge,!invalid"
           MERGE_METHOD_LABELS: automerge=merge,autosquash=squash
           MERGE_REMOVE_LABELS: automerge,autosquash
