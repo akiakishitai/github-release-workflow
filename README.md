@@ -18,3 +18,8 @@ GitHub workflow files for automation.
 
   Automatically merge pull requests with a specific label (`automerge` and `autosquash`).
   [workflows/automerge.yml](.github/workflows/automerge.yml)
+
+- **CI**
+
+  CI workflow.
+  [workflows/ci.yml](.github/workflows/ci.yml)
