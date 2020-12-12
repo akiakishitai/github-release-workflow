@@ -1,0 +1,7 @@
+# reviewdog configuration
+
+runner:
+  # https://standardjs.com
+  standardjs:
+    cmd: npx standard
+    level: warning

@@ -23,3 +23,9 @@ GitHub workflow files for automation.
 
   CI workflow.
   [workflows/ci.yml](.github/workflows/ci.yml)
+
+- **Linter with Reviewdog**
+
+  Find and fix problem in your code.
+  And report them in pull request comments.
+  [workflows/reviewdog.yml](.github/workflows/reviewdog.yml)
