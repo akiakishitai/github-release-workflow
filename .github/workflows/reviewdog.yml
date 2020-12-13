@@ -1,0 +1,53 @@
+name: reviewdog
+
+on:
+  pull_request:
+
+env:
+  DOG_CONFIG: .github/.reviewdog.yml
+
+jobs:
+  markups:
+    name: runner - markup languages
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: yamllint v1.2.0
+        # https://github.com/reviewdog/action-yamllint
+        uses: reviewdog/action-yamllint@068ece8
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          level: error
+          reporter: github-pr-review
+
+  javascript:
+    name: runner - javascript standard
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: setup standard
+        run: npm install standard
+
+      # when not found js files, throw error
+      - name: standard fix
+        run: npx standard --fix
+        continue-on-error: true
+
+      - name: setup reviewdog v1.0.2
+        uses: reviewdog/action-setup@d2193ef
+        with:
+          reviewdog_version: v0.11.0
+
+      - name: run reviewdog
+        run: |
+          TMPFILE=$(mktemp)
+          git diff > "${TMPFILE}"
+          git stash -u && git stash drop
+          reviewdog -f=diff -f.diff.strip=1 -reporter=github-pr-review \
+            < "${TMPFILE}"
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
