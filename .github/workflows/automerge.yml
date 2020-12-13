@@ -20,12 +20,14 @@ on:
 
 jobs:
   automerge:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'automerge') || !contains(github.event_name, 'pull_request') }}
     steps:
       - name: automerge
         uses: "pascalgn/automerge-action@c9bd182"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           MERGE_LABELS: "automerge,!invalid"
-          MERGE_METHOD_LABELS: automerge=merge,autosquash=squash
+          MERGE_METHOD_LABELS: autosquash=squash
           MERGE_REMOVE_LABELS: automerge,autosquash
+          MERGE_RETRIES: 3
