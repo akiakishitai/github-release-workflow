@@ -1,14 +1,26 @@
 name: CI
 
 on:
-  pull_request:
+  workflow_run:
+    workflows:
+      - reviewdog
+    types:
+      - completed
 
 jobs:
   test:
     runs-on: ubuntu-18.04
     steps:
+      - name: dump
+        run: echo ${{ github.event }}
+
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: check sha
+        run: git rev-parse HEAD
 
       - name: test
         run: echo "todo"
