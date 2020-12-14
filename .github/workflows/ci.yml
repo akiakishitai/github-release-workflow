@@ -1,7 +1,12 @@
 name: CI
 
 on:
-  pull_request:
+  workflow_run:
+    workflows:
+      - reviewdog
+    types:
+      - completed
+  workflow_dispatch: {}
 
 jobs:
   test:
@@ -9,6 +14,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: test
         run: echo "todo"
