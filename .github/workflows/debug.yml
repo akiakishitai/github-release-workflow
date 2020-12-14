@@ -24,7 +24,7 @@ jobs:
         id: pr_info
         run: |
           OUTPUT="`dirname $GITHUB_EVENT_PATH`/tmp.json"
-          PR_JSON=`cat $GITHUB_EVENT_PATH | jq '.workflow_run.pull_requests[] | select(.head.sha == "${{ github.sha }}") '`
+          PR_JSON=`cat $GITHUB_EVENT_PATH | jq '.workflow_run.pull_requests[] | select(.head.sha == "${{ github.event.workflow_run.head_sha }}") '`
 
           cat $GITHUB_EVENT_PATH |
             jq ".pull_request = $PR_JSON" > $OUTPUT
