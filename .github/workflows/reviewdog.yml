@@ -7,6 +7,7 @@ on:
       - Create Pull Request
     types:
       - completed
+  workflow_dispatch: {}
 
 env:
   REF_SHA: ${{ github.event.workflow_run.head_sha }}
@@ -29,6 +30,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           level: error
           reporter: github-pr-review
+          reviewdog_flags: "-guess"
 
   javascript:
     name: runner - javascript standard
@@ -57,7 +59,7 @@ jobs:
           TMPFILE=$(mktemp)
           git diff > "${TMPFILE}"
           git stash -u && git stash drop
-          reviewdog -f=diff -f.diff.strip=1 -reporter=github-pr-review \
+          reviewdog -f=diff -f.diff.strip=1 -reporter=github-pr-review -guess \
             < "${TMPFILE}"
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
