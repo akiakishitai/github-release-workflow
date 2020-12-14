@@ -1,15 +1,12 @@
 name: Create Pull Request
 
 on:
-  push:
-    branches-ignore:
-      - "main"
-      - "master"
+  create: {}
 
 jobs:
   automated-pr:
     runs-on: ubuntu-18.04
-    if: ${{ github.event.created }}
+    if: ${{ github.event.ref_type == 'branch' }}
     steps:
       - name: check out
         uses: actions/checkout@v2
@@ -37,15 +34,21 @@ jobs:
         id: create_pr
         uses: actions/github-script@47f7cf65b5ced0830a325f705cad64f2f58dddf7
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const query = process.env.PR_QUERY
+
+            const badge = `
+
+            [![actions/github-script](https://img.shields.io/badge/generated%20by-GitHub%20Sctipt-blue?logoColor=b3e5fc&logo=github-actions)](https://github.com/marketplace/actions/github-script)
+            `
+
             const variables = {
               repoId: process.env.PR_REPOID,
               base: process.env.PR_BASE,
               head: process.env.PR_HEAD,
               title: process.env.PR_TITLE,
-              body: process.env.PR_BODY,
+              body: process.env.PR_BODY + badge,
             }
 
             return await github.graphql(query, variables)
@@ -56,18 +59,3 @@ jobs:
           PR_HEAD: ${{ env.BRANCH }}
           PR_TITLE: "WIP: created automatically"
           PR_BODY: ${{ env.TEMPLATE }}
-
-      - name: post comment
-        uses: peter-evans/create-or-update-comment@5221bf4aa615e5c6e95bb142f9673a9c791be2cd
-        with:
-          issue-number: ${{ fromJson(steps.create_pr.outputs.result).createPullRequest.pullRequest.number }}
-          body: |
-            This pull request was generated automatically (by [actions/github-script][link-1]).
-            Please modify the title and body.
-
-            Thanks!
-
-            [![create-or-update-comment](https://img.shields.io/badge/used-Create%20or%20Update%20Comment-blue?logoColor=b3e5fc&logo=github-actions)][link-2]
-
-            [link-1]: https://github.com/actions/github-script
-            [link-2]: https://github.com/peter-evans/create-or-update-comment
