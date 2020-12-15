@@ -5,23 +5,18 @@ on:
     types:
       - labeled
       - unlabeled
-      - synchronize
-      - opened
       - ready_for_review
-      - reopened
       - unlocked
   pull_request_review:
     types:
       - submitted
-  check_suite:
-    types:
-      - completed
   status: {}
 
 jobs:
   automerge:
     runs-on: ubuntu-20.04
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'automerge') || !contains(github.event_name, 'pull_request') }}
+    name: auto merge
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'automerge') || contains(github.event_name, 'pull_request_review') || github.event.state == 'success' }}
     steps:
       - name: automerge
         uses: "pascalgn/automerge-action@c9bd182"
