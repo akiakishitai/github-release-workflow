@@ -1,0 +1,17 @@
+{
+  "problemMatcher": [
+    {
+      "owner": "test-demo",
+      "pattern": [
+        {
+          "regexp": "^([^:]+):(\\d+):(\\d+): (.+)$",
+          "message": 4,
+          "file": 1,
+          "fromPath": 1,
+          "line": 2,
+          "column": 3
+        }
+      ]
+    }
+  ]
+}
