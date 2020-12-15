@@ -1,21 +1,75 @@
 name: CI
 
 on:
-  workflow_run:
-    workflows:
-      - reviewdog
-    types:
-      - completed
+  pull_request: {}
   workflow_dispatch: {}
 
+env:
+  DOG_CONFIG: .github/.reviewdog.yml
+
 jobs:
-  test:
-    runs-on: ubuntu-18.04
+  markups:
+    name: reviewdog / markups
+    runs-on: ubuntu-20.04
+    if: ${{ github.event_name == 'pull_request' }}
     steps:
       - name: checkout
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
 
+      - name: yamllint v1.2.0
+        # https://github.com/reviewdog/action-yamllint
+        uses: reviewdog/action-yamllint@068ece8
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          level: error
+          reporter: github-pr-review
+          reviewdog_flags: "-guess"
+
+  javascript:
+    name: reviewdog / standardjs
+    runs-on: ubuntu-20.04
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: setup standard
+        run: npm install standard
+
+      # when not found js files, throw error
+      - name: standard fix
+        run: npx standard --fix
+        continue-on-error: true
+
+      - name: setup reviewdog v1.0.2
+        uses: reviewdog/action-setup@d2193ef
+        with:
+          reviewdog_version: v0.11.0
+
+      - name: run reviewdog
+        run: |
+          TMPFILE=$(mktemp)
+          git diff > "${TMPFILE}"
+          git stash -u && git stash drop
+          reviewdog -f=diff -f.diff.strip=1 -reporter=github-pr-review -guess \
+            < "${TMPFILE}"
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
+    name: test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: problem matcher
+        run: |
+          echo "::add-matcher::$MATCHER"
+        env:
+          MATCHER: .github/problemMatcher/test-demo-matcher.json
+
+      # demo
       - name: test
-        run: echo "todo"
+        run: |
+          echo "sample.js:1:10: [standardjs] 'hoge' is defined but never used."
