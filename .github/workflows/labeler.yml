@@ -1,18 +1,39 @@
 name: Auto-labeled-on-PR
 
 on:
-  status: {}
+  pull_request:
+    types:
+      - opened
+      - edited
 
 jobs:
   auto-labeled:
     runs-on: ubuntu-20.04
     name: auto labeled
-    if: ${{ github.event.state == 'success' }}
+    # reference conventional commit types
+    # https://github.com/commitizen/conventional-commit-types/blob/master/index.json
+    if: |
+      ${{
+        github.event.pull_request.state == 'open' &&
+        (
+          startWith(github.event.pull_request.title, 'feat') ||
+          startWith(github.event.pull_request.title, 'fix') ||
+          startWith(github.event.pull_request.title, 'chore') ||
+          startWith(github.event.pull_request.title, 'docs') ||
+          startWith(github.event.pull_request.title, 'style') ||
+          startWith(github.event.pull_request.title, 'refactor') ||
+          startWith(github.event.pull_request.title, 'pref') ||
+          startWith(github.event.pull_request.title, 'test') ||
+          startWith(github.event.pull_request.title, 'build') ||
+          startWith(github.event.pull_request.title, 'ci') ||
+          startWith(github.event.pull_request.title, 'revert')
+        )
+      }}
     steps:
       - name: labeled
         uses: actions/github-script@47f7cf65b5ced0830a325f705cad64f2f58dddf7
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const config = [
               { title: /^(fix|docs|style|refactor|perf|chore)[^:]*:/, labels: ['patch'] },
