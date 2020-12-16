@@ -1,0 +1,48 @@
+name-template: "Release v$RESOLVED_VERSION"
+tag-template: "v$RESOLVED_VERSION"
+change-template: "* $TITLE (#$NUMBER) @$AUTHOR"
+template: |
+  Update from $PREVIOUS_TAG
+
+  [![used by release-drafter][badge]][apps]
+
+  [badge]: https://img.shields.io/badge/used%20by-Release%20Drafter%20v5.12.1-blue?logoColor=b3e5fc&logo=github-actions&color=FFD54F
+  [apps]: https://github.com/marketplace/actions/release-drafter
+
+  ## Changes
+
+  $CHANGES
+version-resolver:
+  major:
+    labels:
+      - major
+      - BREAKING CHANGE
+  minor:
+    labels:
+      - minor
+      - feature
+      - enhancement
+  patch:
+    labels:
+      - patch
+      - fix
+      - chore
+      - documentation
+  default: patch
+categories:
+  - title: 🚀 Features
+    labels:
+      - feature
+      - enhancement
+  - title: 🐛 Bug Fixes
+    labels:
+      - fix
+      - bug
+  - title: 🧰 Maintenance
+    label:
+      - patch
+      - chore
+      - documentation
+exclude-labels:
+  - invalid
+  - skip-changelog

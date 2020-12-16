@@ -29,3 +29,8 @@ GitHub workflow files for automation.
   Find and fix problem in your code.
   And report them in pull request comments.
   [workflows/reviewdog.yml](.github/workflows/reviewdog.yml)
+
+- **Release**
+
+  Create the next release note when the pull request is merged into the main.
+  [workflows/release.yml](.github/workflows/release.yml)

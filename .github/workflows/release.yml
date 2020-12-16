@@ -1,0 +1,13 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update_release_draft:
+    runs-on: ubuntu-latest
+    name: release drafter v5.12.1
+    steps:
+      - uses: release-drafter/release-drafter@3782ccd
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

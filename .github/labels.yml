@@ -50,3 +50,19 @@
 - name: "autosquash"
   color: "9FA8DA"
   description: "This pull request squash automatically"
+
+- name: BREAKING CHANGE
+  color: D84315
+  description: Introduces a breaking API change
+
+- name: fix
+  color: FFD54F
+  description: A bug fix pull request
+
+- name: chore
+  color: A1887F
+  description: Other changes that don't modify source code
+
+- name: skip-changelog
+  color: 4E342E
+  description: Not to be included in changelog
