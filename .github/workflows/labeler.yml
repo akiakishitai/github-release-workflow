@@ -36,9 +36,12 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const config = [
-              { title: /^(fix|docs|style|refactor|perf|chore)[^:]*:/, labels: ['patch'] },
-              { title: /^feat[^:]*:/, labels: ['minor'] },
-              { title: /^([^:]+!|BREAKING CHANGE):/, labels: ['major'] },
+              { title: /^feat[^:]*:/, labels: ['enhancement'] },
+              { title: /^fix[^:]*:/, labels: ['fix'] },
+              { title: /^docs[^:]*:/, labels: ['documentation'] },
+              { title: /^chore[^:]*:/, labels: ['chore'] },
+              { title: /^(style|refactor|perf|test|build|ci|revert)[^:]*:/, labels: ['patch'] },
+              { title: /^([^:]+!|BREAKING CHANGE):/, labels: ['BREAKING CHANGE'] },
             ]
 
             const labels = config
