@@ -16,17 +16,17 @@ jobs:
       ${{
         github.event.pull_request.state == 'open' &&
         (
-          startWith(github.event.pull_request.title, 'feat') ||
-          startWith(github.event.pull_request.title, 'fix') ||
-          startWith(github.event.pull_request.title, 'chore') ||
-          startWith(github.event.pull_request.title, 'docs') ||
-          startWith(github.event.pull_request.title, 'style') ||
-          startWith(github.event.pull_request.title, 'refactor') ||
-          startWith(github.event.pull_request.title, 'pref') ||
-          startWith(github.event.pull_request.title, 'test') ||
-          startWith(github.event.pull_request.title, 'build') ||
-          startWith(github.event.pull_request.title, 'ci') ||
-          startWith(github.event.pull_request.title, 'revert')
+          startsWith(github.event.pull_request.title, 'feat') ||
+          startsWith(github.event.pull_request.title, 'fix') ||
+          startsWith(github.event.pull_request.title, 'chore') ||
+          startsWith(github.event.pull_request.title, 'docs') ||
+          startsWith(github.event.pull_request.title, 'style') ||
+          startsWith(github.event.pull_request.title, 'refactor') ||
+          startsWith(github.event.pull_request.title, 'pref') ||
+          startsWith(github.event.pull_request.title, 'test') ||
+          startsWith(github.event.pull_request.title, 'build') ||
+          startsWith(github.event.pull_request.title, 'ci') ||
+          startsWith(github.event.pull_request.title, 'revert')
         )
       }}
     steps:
