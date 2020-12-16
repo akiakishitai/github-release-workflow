@@ -1,3 +1,5 @@
+name: draft next release
+
 on:
   push:
     branches:
