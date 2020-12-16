@@ -14,6 +14,14 @@ jobs:
       - name: current branch
         run: echo "BRANCH=`git name-rev --name-only HEAD`" >> $GITHUB_ENV
 
+      - name: read graphql file
+        id: gql
+        run: |
+          exec 1>> $GITHUB_ENV
+          echo 'GQL_QUERY<<EOF'
+          cat .github/create-pr.gql
+          echo 'EOF'
+
       - name: read template of pull request
         id: template
         run: |
@@ -23,16 +31,32 @@ jobs:
           echo 'EOF'
 
       - name: create pull request
-        run: |
-          echo $GITHUB_TOKEN | gh auth login --with-token
+        id: create_pr
+        uses: actions/github-script@47f7cf65b5ced0830a325f705cad64f2f58dddf7
+        with:
+          github-token: ${{ secrets.PERSONAL_TOKEN }}
+          script: |
+            const query = process.env.PR_QUERY
 
-          COMMIT_SUBJECT=`git show --format=%s`
+            const badge = `
 
-          gh pr create --draft \
-            --base $PR_BASE \
-            --title "WIP: $COMMIT_SUBJECT" \
-            --body $PR_BODY
+            ---
+            [![actions/github-script](https://img.shields.io/badge/generated%20by-GitHub%20Sctipt%20v3.1.0-blue?logoColor=b3e5fc&logo=github-actions)](https://github.com/marketplace/actions/github-script)
+            `
+
+            const variables = {
+              repoId: process.env.PR_REPOID,
+              base: process.env.PR_BASE,
+              head: process.env.PR_HEAD,
+              title: process.env.PR_TITLE,
+              body: process.env.PR_BODY + badge,
+            }
+
+            return await github.graphql(query, variables)
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          PR_QUERY: ${{ env.GQL_QUERY }}
+          PR_REPOID: ${{ github.event.repository.node_id }}
           PR_BASE: ${{ github.event.repository.default_branch }}
+          PR_HEAD: ${{ env.BRANCH }}
+          PR_TITLE: "WIP: created automatically"
           PR_BODY: ${{ env.TEMPLATE }}
