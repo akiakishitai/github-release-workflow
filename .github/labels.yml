@@ -43,14 +43,6 @@
   color: "FBC02D"
   description: "This pull request raises a PATCH version"
 
-- name: "automerge"
-  color: "4DD0E1"
-  description: "This pull request merges automatically"
-
-- name: "autosquash"
-  color: "9FA8DA"
-  description: "This pull request squash automatically"
-
 - name: BREAKING CHANGE
   color: D84315
   description: Introduces a breaking API change
