@@ -7,10 +7,42 @@ on:
       - main
 
 jobs:
-  update_release_draft:
-    runs-on: ubuntu-latest
+  release-draft:
+    runs-on: ubuntu-20.04
     name: release drafter v5.12.1
+    outputs:
+      id: ${{ steps.release-drafter.outputs.id }}
+      upload_url: ${{ steps.release-drafter.outputs.upload_url }}
     steps:
       - uses: release-drafter/release-drafter@3782ccd
+        id: release-drafter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  upload-release-assets:
+    runs-on: ubuntu-20.04
+    name: upload release assets v1.0.2
+    needs:
+      - release-draft
+    env:
+      ZIP_FILE: dot-github-files.zip
+    steps:
+      - name: check out
+        uses: actions/checkout@v2
+
+      - name: build assets
+        run: |
+          pushd .github
+          zip -r $ZIP_FILE *
+          mv $ZIP_FILE ../
+
+      - name: upload release assets
+        id: upload-release-asset
+        uses: actions/upload-release-asset@e8f9f06
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release-draft.outputs.upload_url }}
+          asset_path: ${{ env.ZIP_FILE }}
+          asset_name: ${{ env.ZIP_FILE }}
+          asset_content_type: application/zip
