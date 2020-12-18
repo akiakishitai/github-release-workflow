@@ -29,3 +29,15 @@ GitHub workflow files for automation.
 
   Create the next release note when the pull request is merged into the main.
   [workflows/release.yml](.github/workflows/release.yml)
+
+## Usage
+
+Download the release assets, and extract them to the `.github` directory in your repository.
+
+```bash
+$ curl -sSLO https://github.com/akiakishitai/github-release-workflow/releases/latest/download/dot-github-files.zip
+$ unzip -d .github dot-github-files.zip
+$ rm dot-github-files.zip
+```
+
+Then, customize each workflow file.
