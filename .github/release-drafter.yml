@@ -15,11 +15,9 @@ template: |
 version-resolver:
   major:
     labels:
-      - major
       - BREAKING CHANGE
   minor:
     labels:
-      - minor
       - feature
       - enhancement
   patch:
