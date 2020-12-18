@@ -31,14 +31,6 @@
   description: "Further information is requested"
 
 # Atutomated labels
-- name: "major"
-  color: "303F9F"
-  description: "This pull request raises a MAJOR version"
-
-- name: "minor"
-  color: "00796B"
-  description: "This pull request raises a MINOR version"
-
 - name: "patch"
   color: "FBC02D"
   description: "This pull request raises a PATCH version"
