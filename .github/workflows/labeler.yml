@@ -1,4 +1,4 @@
-name: Auto-labeled-on-PR
+name: labeled on pull request
 
 on:
   pull_request:
@@ -14,20 +14,17 @@ jobs:
     # https://github.com/commitizen/conventional-commit-types/blob/master/index.json
     if: |
       ${{
-        github.event.pull_request.state == 'open' &&
-        (
-          startsWith(github.event.pull_request.title, 'feat') ||
-          startsWith(github.event.pull_request.title, 'fix') ||
-          startsWith(github.event.pull_request.title, 'chore') ||
-          startsWith(github.event.pull_request.title, 'docs') ||
-          startsWith(github.event.pull_request.title, 'style') ||
-          startsWith(github.event.pull_request.title, 'refactor') ||
-          startsWith(github.event.pull_request.title, 'pref') ||
-          startsWith(github.event.pull_request.title, 'test') ||
-          startsWith(github.event.pull_request.title, 'build') ||
-          startsWith(github.event.pull_request.title, 'ci') ||
-          startsWith(github.event.pull_request.title, 'revert')
-        )
+        startsWith(github.event.pull_request.title, 'feat') ||
+        startsWith(github.event.pull_request.title, 'fix') ||
+        startsWith(github.event.pull_request.title, 'chore') ||
+        startsWith(github.event.pull_request.title, 'docs') ||
+        startsWith(github.event.pull_request.title, 'style') ||
+        startsWith(github.event.pull_request.title, 'refactor') ||
+        startsWith(github.event.pull_request.title, 'pref') ||
+        startsWith(github.event.pull_request.title, 'test') ||
+        startsWith(github.event.pull_request.title, 'build') ||
+        startsWith(github.event.pull_request.title, 'ci') ||
+        startsWith(github.event.pull_request.title, 'revert')
       }}
     steps:
       - name: labeled
