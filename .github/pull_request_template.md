@@ -11,9 +11,10 @@ And write the type to as a prefix to the title of your PR ([Conventional Commits
 
 - [ ] `fix`: A bug fix
 - [ ] `feat`: A new feature
-- [ ] appends `!` after the type or a commit has `BREAKING CHANGE:` in footer : Breaking change (feature or bug fix)
 - [ ] `chore`: Build tool changes
 - [ ] `docs`: Documentation only changes
+
+⚠️ If there are breaking changes, appends **`!`** after the type or a commit has `BREAKING CHANGE:` in footer.
 
 ## What is the new behavior? (optional) - 新しい動作の補足説明
 
