@@ -67,7 +67,7 @@ jobs:
         run: |
           echo "::add-matcher::$MATCHER"
         env:
-          MATCHER: .github/problemMatcher/test-demo-matcher.json
+          MATCHER: .github/problem-matcher.json
 
       # demo
       - name: test
